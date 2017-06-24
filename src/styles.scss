@@ -1,0 +1,11 @@
+body {
+    background-color: #eee;
+    & {
+        margin-top: 20px;
+    }
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}

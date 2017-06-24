@@ -1,0 +1,20 @@
+{
+    "version": "1.0.0",
+    "summary": "elm-hot-loader-starter",
+    "repository": "https://github.com/simonh1000/elm-hot-loading-starter.git",
+    "license": "ISC",
+    "source-directories": [
+        "src"
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "chendrix/elm-matrix": "3.1.2 <= v < 4.0.0",
+        "elm-lang/core": "5.0.0 <= v < 6.0.0",
+        "elm-lang/html": "2.0.0 <= v < 3.0.0",
+        "elm-lang/http": "1.0.0 <= v < 2.0.0",
+        "elm-lang/keyboard": "1.0.1 <= v < 2.0.0",
+        "elm-lang/mouse": "1.0.1 <= v < 2.0.0",
+        "evancz/elm-graphics": "1.0.1 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+}
