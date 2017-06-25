@@ -10,7 +10,7 @@ import Collage exposing (filled, rect, move, collage)
 import Color exposing (rgb)
 import Mouse
 import Keyboard
-import Time exposing (Time, second)
+import Time exposing (Time, millisecond)
 
 
 ( square_size, square_amount ) =
@@ -30,6 +30,8 @@ type alias Model =
     { grid : Grid
     , running : Bool
     , key : Keyboard.KeyCode
+    , keyboardX : Int
+    , keyboardY : Int
     }
 
 
@@ -49,6 +51,8 @@ init =
             )
       , running = True
       , key = 0
+      , keyboardX = 0
+      , keyboardY = 0
       }
     , Cmd.none
     )
@@ -87,10 +91,23 @@ update message model =
             model ! []
 
         KeyMsg code ->
-            { model | key = code } ! []
+            handleKeyPress code model ! []
 
         Clear ->
             init
+
+
+handleKeyPress : Keyboard.KeyCode -> Model -> Model
+handleKeyPress code model =
+    case code of
+        32 ->
+            { model | running = not model.running }
+
+        83 ->
+            { model | grid = (advance model.grid) }
+
+        _ ->
+            model
 
 
 advance : Grid -> Grid
@@ -229,6 +246,6 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Mouse.clicks MouseMsg
-        , Time.every second TimeTick
+        , Time.every (100 * millisecond) TimeTick
         , Keyboard.downs KeyMsg
         ]
