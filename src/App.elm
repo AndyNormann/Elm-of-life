@@ -10,7 +10,7 @@ import Collage exposing (filled, rect, move, collage)
 import Color exposing (rgb)
 import Mouse
 import Keyboard
-import Time exposing (Time, second)
+import Time exposing (Time, millisecond)
 
 
 ( square_size, square_amount ) =
@@ -201,7 +201,6 @@ view model =
     div [ class "center" ]
         [ div []
             [ h1 [ class "center" ] [ text "Game of Life" ]
-            , h5 [ class "center" ] [ text "made in elm" ]
             , div [ class "center" ]
                 [ button [ class "btn btn-info", onClick Tick ] [ text "Step" ]
                 , button [ class "btn btn-info", onClick Pause ]
@@ -229,6 +228,6 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Mouse.clicks MouseMsg
-        , Time.every second TimeTick
+        , Time.every (100 * millisecond) TimeTick
         , Keyboard.downs KeyMsg
         ]
