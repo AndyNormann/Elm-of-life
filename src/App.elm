@@ -1,6 +1,6 @@
 module App exposing (..)
 
-import Html exposing (Html, div, text, h1, h5, p, button)
+import Html exposing (Html, div, text, h1, h5, p, button, span)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Debug exposing (log)
@@ -30,6 +30,7 @@ type alias Model =
     { grid : Grid
     , running : Bool
     , key : Keyboard.KeyCode
+    , timestep : Time
     }
 
 
@@ -49,6 +50,7 @@ init =
             )
       , running = True
       , key = 0
+      , timestep = 100
       }
     , Cmd.none
     )
@@ -63,6 +65,8 @@ type Msg
     | Pause
     | MouseMsg Mouse.Position
     | KeyMsg Keyboard.KeyCode
+    | Inc
+    | Dec
     | TimeTick Time
     | Clear
 
@@ -79,6 +83,12 @@ update message model =
                     ! []
             else
                 model ! []
+
+        Inc ->
+            { model | timestep = model.timestep + 20 } ! []
+
+        Dec ->
+            { model | timestep = model.timestep - 20 } ! []
 
         Pause ->
             { model | running = not model.running } ! []
@@ -201,20 +211,22 @@ view model =
     div [ class "center" ]
         [ div []
             [ h1 [ class "center" ] [ text "Game of Life" ]
+            , div []
+                [ drawMatrix model.grid
+                    |> collage collage_size collage_size
+                    |> toHtml
+                ]
             , div [ class "center" ]
                 [ button [ class "btn btn-info", onClick Tick ] [ text "Step" ]
-                , button [ class "btn btn-info", onClick Pause ]
+                , button [ class "btn btn-primary", onClick Pause ]
                     [ if model.running == True then
                         text "Pause"
                       else
                         text "Unpause"
                     ]
                 , button [ class "btn btn-info", onClick Clear ] [ text "Clear" ]
-                ]
-            , div []
-                [ drawMatrix model.grid
-                    |> collage collage_size collage_size
-                    |> toHtml
+                , button [ class "btn btn-secondary", onClick Dec ] [ text "^" ]
+                , button [ class "btn btn-secondary", onClick Inc ] [ text "v" ]
                 ]
             ]
         ]
@@ -228,6 +240,6 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Mouse.clicks MouseMsg
-        , Time.every (100 * millisecond) TimeTick
+        , Time.every (model.timestep * millisecond) TimeTick
         , Keyboard.downs KeyMsg
         ]
